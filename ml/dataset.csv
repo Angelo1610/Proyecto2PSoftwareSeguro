@@ -1,0 +1,21 @@
+code,label
+"import os; os.system('rm -rf /')",vulnerable
+"eval(user_input)",vulnerable
+"exec(open('file.py').read())",vulnerable
+"cursor.execute('SELECT * FROM users WHERE id = ' + user_id)",vulnerable
+"subprocess.call(user_command, shell=True)",vulnerable
+"def add(a, b): return a + b",safe
+"import math; result = math.sqrt(16)",safe
+"with open('file.txt', 'r') as f: content = f.read()",safe
+"print('Hello, World!')",safe
+"data = [1, 2, 3, 4, 5]; total = sum(data)",safe
+"os.system('ls -la')",vulnerable
+"eval('2 + 2')",vulnerable
+"import json; data = json.loads(json_string)",safe
+"cursor.execute('SELECT * FROM users WHERE id = ?', (user_id,))",safe
+"def calculate(x): return x * 2",safe
+"exec(compile(code, '<string>', 'exec'))",vulnerable
+"subprocess.Popen(cmd, shell=True)",vulnerable
+"result = 10 + 20; print(result)",safe
+"import requests; response = requests.get(url)",safe
+"cursor.execute(f'SELECT * FROM users WHERE name = {name}')",vulnerable
