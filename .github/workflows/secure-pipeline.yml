@@ -3,7 +3,7 @@ name: Secure Pipeline ML
 on:
   pull_request:
     branches:
-      - test   # ← Cada PR hacia test activa el análisis de seguridad
+      - test
 
 jobs:
 
@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0   # ← NECESARIO para git diff
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -40,6 +42,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0   # ← TAMBIÉN AQUÍ
 
       - name: Install dependencies
         run: pip install -r requirements.txt
@@ -56,6 +60,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0   # ← TAMBIÉN AQUÍ
 
       - name: Deploy to Railway
         run: railway up --service secure-app

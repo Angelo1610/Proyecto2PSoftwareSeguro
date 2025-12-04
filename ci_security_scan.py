@@ -1,17 +1,18 @@
 import sys
 import os
-sys.path.append(os.path.abspath("src"))
-
 import subprocess
 import requests
+import platform
+
+sys.path.append(os.path.abspath("src"))
+
 from src.utils.classifier import classify
 
 TG_TOKEN = os.environ.get("TG_TOKEN")
 TG_CHAT = os.environ.get("TG_CHAT")
 
-# Variables que vienen del workflow (base_ref y head_ref)
-BASE = os.environ.get("BASE")
-HEAD = os.environ.get("HEAD")
+# GH CLI path (Windows vs Linux)
+GH = r"C:\Program Files\GitHub CLI\gh.exe" if platform.system() == "Windows" else "gh"
 
 def notify(msg: str):
     if TG_TOKEN and TG_CHAT:
@@ -22,30 +23,22 @@ def notify(msg: str):
 
 notify("🔍 Iniciando revisión de seguridad del PR...")
 
-# ============================
-# Obtener diff del Pull Request
-# ============================
-diff_cmd = f"git diff origin/{BASE}...origin/{HEAD}"
-
+# FIJO Y COMPATIBLE CON GITHUB ACTIONS
 diff = subprocess.check_output(
-    diff_cmd,
+    "git diff HEAD~1",
     shell=True,
     stderr=subprocess.STDOUT,
     encoding="utf-8",
     errors="replace"
 )
 
-# ============================
-# Clasificación con ML
-# ============================
 prediction, prob, details = classify(diff)
 
 if prediction == "vulnerable":
     notify(f"❌ Código vulnerable detectado. Prob: {prob*100:.2f}%")
 
-    # Crear issue con GH CLI (Linux, ya instalado en Actions)
     subprocess.run([
-        "gh", "issue", "create",
+        GH, "issue", "create",
         "--title", "⚠ Vulnerabilidad detectada en PR",
         "--body", f"Probabilidad: {prob}\n\nDetalles:\n{details}"
     ])
