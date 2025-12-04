@@ -81,14 +81,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install Railway CLI
-        run: npm i -g @railway/cli
-
       - name: Deploy to Railway
-        run: railway up
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        uses: bervProject/railway-deploy@main
+        with:
+          railway_token: ${{ secrets.RAILWAY_TOKEN }}
+          service: secure-app
 
       - name: Notificar despliegue
+        if: success()
         run: |
           curl -s "https://api.telegram.org/bot${{ secrets.TG_TOKEN }}/sendMessage?chat_id=${{ secrets.TG_CHAT }}&text=✔ Deploy realizado correctamente 🚀"
