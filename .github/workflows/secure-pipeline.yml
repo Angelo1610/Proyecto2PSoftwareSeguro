@@ -81,18 +81,20 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Deploy to Railway
-        uses: railwayapp/railway-deploy@v1
-        with:
-          railway_token: ${{ secrets.RAILWAY_TOKEN }}
-          service: secure-app
+      - name: Trigger Railway Deploy
+        run: |
+          curl --request POST \
+            --url https://backboard.railway.app/graphql/v2 \
+            --header "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
+            --header "Content-Type: application/json" \
+            --data '{"query":"mutation { deploymentTrigger(input: { projectId: \"5b873fe4-d8f7-40b6-9a13-f786a1a51153\", environmentId: \"production\" }) { id } }"}'
 
       - name: Notificar despliegue
         if: success()
         run: |
-          curl -s "https://api.telegram.org/bot${{ secrets.TG_TOKEN }}/sendMessage?chat_id=${{ secrets.TG_CHAT }}&text=✅ Deploy realizado correctamente 🚀"
+          curl -s "https://api.telegram.org/bot${{ secrets.TG_TOKEN }}/sendMessage?chat_id=${{ secrets.TG_CHAT }}&text=✅ Deploy iniciado en Railway 🚀"
       
       - name: Notificar error en deploy
         if: failure()
         run: |
-          curl -s "https://api.telegram.org/bot${{ secrets.TG_TOKEN }}/sendMessage?chat_id=${{ secrets.TG_CHAT }}&text=❌ Error en el deploy - Revisa los logs en GitHub Actions"
+          curl -s "https://api.telegram.org/bot${{ secrets.TG_TOKEN }}/sendMessage?chat_id=${{ secrets.TG_CHAT }}&text=❌ Error al iniciar el deploy"
