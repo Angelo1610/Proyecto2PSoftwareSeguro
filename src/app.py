@@ -1,5 +1,11 @@
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+# 🔥 Añadido SOLO para activar el pipeline CI/CD
+print("codigo seguro")
+
 from flask import Flask, request, jsonify
-from utils.classifier import classify
+from src.utils.classifier import classify
 
 app = Flask(__name__)
 

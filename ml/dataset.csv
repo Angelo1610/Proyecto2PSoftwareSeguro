@@ -1,21 +1,501 @@
 code,label
-"import os; os.system('rm -rf /')",vulnerable
-"eval(user_input)",vulnerable
-"exec(open('file.py').read())",vulnerable
-"cursor.execute('SELECT * FROM users WHERE id = ' + user_id)",vulnerable
-"subprocess.call(user_command, shell=True)",vulnerable
-"def add(a, b): return a + b",safe
-"import math; result = math.sqrt(16)",safe
-"with open('file.txt', 'r') as f: content = f.read()",safe
-"print('Hello, World!')",safe
-"data = [1, 2, 3, 4, 5]; total = sum(data)",safe
-"os.system('ls -la')",vulnerable
-"eval('2 + 2')",vulnerable
-"import json; data = json.loads(json_string)",safe
-"cursor.execute('SELECT * FROM users WHERE id = ?', (user_id,))",safe
-"def calculate(x): return x * 2",safe
-"exec(compile(code, '<string>', 'exec'))",vulnerable
-"subprocess.Popen(cmd, shell=True)",vulnerable
-"result = 10 + 20; print(result)",safe
-"import requests; response = requests.get(url)",safe
-"cursor.execute(f'SELECT * FROM users WHERE name = {name}')",vulnerable
+''.strip(),0
+''.strip(),0
+"with open('archivo.txt','r') as f: data=f.read()",0
+"numbers=[1,2,3]; [n*2 for n in numbers]",0
+"sorted([5,3,1])",0
+json_data = {'a':1},0
+import math; math.sqrt(25),0
+def login(user): return f'Bienvenido {user}',0
+"total = sum([1,2,3,4])",0
+"mydict={'a':1,'b':2}",0
+x = 5; y = 10; z = x + y,0
+"numbers=[1,2,3]; [n*2 for n in numbers]",0
+x = 5; y = 10; z = x + y,0
+"sorted([5,3,1])",0
+def login(user): return f'Bienvenido {user}',0
+"with open('archivo.txt','r') as f: data=f.read()",0
+''.strip(),0
+import os; path=os.getcwd(),0
+for i in range(10): print(i),0
+x = 5; y = 10; z = x + y,0
+import time; time.sleep(0.1),0
+import math; math.sqrt(25),0
+"mydict={'a':1,'b':2}",0
+print('hola mundo'),0
+"result = ''.join(['a','b','c'])",0
+import os; path=os.getcwd(),0
+int('5'),0
+list(range(5)),0
+x = 5; y = 10; z = x + y,0
+r = requests.get('https://api.com'),0
+def login(user): return f'Bienvenido {user}',0
+import time; time.sleep(0.1),0
+hash('hola'),0
+lambda x: x*2,0
+"total = sum([1,2,3,4])",0
+"result = ''.join(['a','b','c'])",0
+"for k,v in {'a':1}.items(): print(k)",0
+import os; path=os.getcwd(),0
+lambda x: x*2,0
+print('codigo seguro'),0
+def greet(): return 'hi',0
+"numbers=[1,2,3]; [n*2 for n in numbers]",0
+''.strip(),0
+for i in range(10): print(i),0
+"result = ''.join(['a','b','c'])",0
+"mydict={'a':1,'b':2}",0
+"mydict={'a':1,'b':2}",0
+hash('hola'),0
+def greet(): return 'hi',0
+json_data = {'a':1},0
+''.strip(),0
+hash('hola'),0
+json_data = {'a':1},0
+hash('hola'),0
+"numbers=[1,2,3]; [n*2 for n in numbers]",0
+import math; math.sqrt(25),0
+"usuarios = ['a', 'b']",0
+"def suma(a,b): return a+b",0
+"usuarios = ['a', 'b']",0
+import time; time.sleep(0.1),0
+int('5'),0
+import os; path=os.getcwd(),0
+"result = ''.join(['a','b','c'])",0
+for i in range(10): print(i),0
+"for k,v in {'a':1}.items(): print(k)",0
+"def suma(a,b): return a+b",0
+print('codigo seguro'),0
+"result = ''.join(['a','b','c'])",0
+list(range(5)),0
+hash('hola'),0
+import math; math.sqrt(25),0
+lambda x: x*2,0
+import math; math.sqrt(25),0
+"total = sum([1,2,3,4])",0
+int('5'),0
+"with open('archivo.txt','r') as f: data=f.read()",0
+for i in range(10): print(i),0
+list(range(5)),0
+hash('hola'),0
+"def suma(a,b): return a+b",0
+hash('hola'),0
+"mydict={'a':1,'b':2}",0
+''.strip(),0
+"usuarios = ['a', 'b']",0
+def login(user): return f'Bienvenido {user}',0
+def login(user): return f'Bienvenido {user}',0
+"def suma(a,b): return a+b",0
+"with open('archivo.txt','r') as f: data=f.read()",0
+import time; time.sleep(0.1),0
+int('5'),0
+''.strip(),0
+hash('hola'),0
+import math; math.sqrt(25),0
+"for k,v in {'a':1}.items(): print(k)",0
+def login(user): return f'Bienvenido {user}',0
+"with open('archivo.txt','r') as f: data=f.read()",0
+print('codigo seguro'),0
+list(range(5)),0
+def greet(): return 'hi',0
+"for k,v in {'a':1}.items(): print(k)",0
+int('5'),0
+"with open('archivo.txt','r') as f: data=f.read()",0
+int('5'),0
+"def suma(a,b): return a+b",0
+"for k,v in {'a':1}.items(): print(k)",0
+for i in range(10): print(i),0
+import time; time.sleep(0.1),0
+"with open('archivo.txt','r') as f: data=f.read()",0
+print('codigo seguro'),0
+import time; time.sleep(0.1),0
+r = requests.get('https://api.com'),0
+"mydict={'a':1,'b':2}",0
+"sorted([5,3,1])",0
+r = requests.get('https://api.com'),0
+''.strip(),0
+"total = sum([1,2,3,4])",0
+import os; path=os.getcwd(),0
+json_data = {'a':1},0
+print('codigo seguro'),0
+lambda x: x*2,0
+lambda x: x*2,0
+r = requests.get('https://api.com'),0
+"for k,v in {'a':1}.items(): print(k)",0
+"usuarios = ['a', 'b']",0
+hash('hola'),0
+"def suma(a,b): return a+b",0
+import os; path=os.getcwd(),0
+import math; math.sqrt(25),0
+"sorted([5,3,1])",0
+lambda x: x*2,0
+"usuarios = ['a', 'b']",0
+hash('hola'),0
+print('codigo seguro'),0
+int('5'),0
+json_data = {'a':1},0
+hash('hola'),0
+lambda x: x*2,0
+r = requests.get('https://api.com'),0
+import os; path=os.getcwd(),0
+"usuarios = ['a', 'b']",0
+"sorted([5,3,1])",0
+"def suma(a,b): return a+b",0
+int('5'),0
+"mydict={'a':1,'b':2}",0
+"with open('archivo.txt','r') as f: data=f.read()",0
+import time; time.sleep(0.1),0
+"sorted([5,3,1])",0
+"def suma(a,b): return a+b",0
+lambda x: x*2,0
+def login(user): return f'Bienvenido {user}',0
+"total = sum([1,2,3,4])",0
+print('hola mundo'),0
+"with open('archivo.txt','r') as f: data=f.read()",0
+import os; path=os.getcwd(),0
+list(range(5)),0
+"def suma(a,b): return a+b",0
+int('5'),0
+''.strip(),0
+int('5'),0
+"with open('archivo.txt','r') as f: data=f.read()",0
+r = requests.get('https://api.com'),0
+import math; math.sqrt(25),0
+"for k,v in {'a':1}.items(): print(k)",0
+import time; time.sleep(0.1),0
+"sorted([5,3,1])",0
+r = requests.get('https://api.com'),0
+"usuarios = ['a', 'b']",0
+def greet(): return 'hi',0
+"usuarios = ['a', 'b']",0
+r = requests.get('https://api.com'),0
+def login(user): return f'Bienvenido {user}',0
+list(range(5)),0
+print('codigo seguro'),0
+print('codigo seguro'),0
+"for k,v in {'a':1}.items(): print(k)",0
+import time; time.sleep(0.1),0
+hash('hola'),0
+import os; path=os.getcwd(),0
+def login(user): return f'Bienvenido {user}',0
+print('codigo seguro'),0
+''.strip(),0
+int('5'),0
+"result = ''.join(['a','b','c'])",0
+''.strip(),0
+list(range(5)),0
+"def suma(a,b): return a+b",0
+def login(user): return f'Bienvenido {user}',0
+"with open('archivo.txt','r') as f: data=f.read()",0
+"with open('archivo.txt','r') as f: data=f.read()",0
+"total = sum([1,2,3,4])",0
+def greet(): return 'hi',0
+x = 5; y = 10; z = x + y,0
+print('hola mundo'),0
+"mydict={'a':1,'b':2}",0
+hash('hola'),0
+list(range(5)),0
+"mydict={'a':1,'b':2}",0
+print('codigo seguro'),0
+print('codigo seguro'),0
+int('5'),0
+''.strip(),0
+"sorted([5,3,1])",0
+import math; math.sqrt(25),0
+"with open('archivo.txt','r') as f: data=f.read()",0
+"usuarios = ['a', 'b']",0
+''.strip(),0
+list(range(5)),0
+"numbers=[1,2,3]; [n*2 for n in numbers]",0
+list(range(5)),0
+hash('hola'),0
+import math; math.sqrt(25),0
+"numbers=[1,2,3]; [n*2 for n in numbers]",0
+lambda x: x*2,0
+list(range(5)),0
+import time; time.sleep(0.1),0
+"total = sum([1,2,3,4])",0
+"sorted([5,3,1])",0
+json_data = {'a':1},0
+print('hola mundo'),0
+def greet(): return 'hi',0
+"numbers=[1,2,3]; [n*2 for n in numbers]",0
+"sorted([5,3,1])",0
+"usuarios = ['a', 'b']",0
+for i in range(10): print(i),0
+int('5'),0
+"total = sum([1,2,3,4])",0
+r = requests.get('https://api.com'),0
+"for k,v in {'a':1}.items(): print(k)",0
+"sorted([5,3,1])",0
+print('codigo seguro'),0
+"numbers=[1,2,3]; [n*2 for n in numbers]",0
+print('hola mundo'),0
+"with open('archivo.txt','r') as f: data=f.read()",0
+int('5'),0
+list(range(5)),0
+"for k,v in {'a':1}.items(): print(k)",0
+for i in range(10): print(i),0
+"result = ''.join(['a','b','c'])",0
+"result = ''.join(['a','b','c'])",0
+list(range(5)),0
+"for k,v in {'a':1}.items(): print(k)",0
+"numbers=[1,2,3]; [n*2 for n in numbers]",0
+lambda x: x*2,0
+r = requests.get('https://api.com'),0
+"numbers=[1,2,3]; [n*2 for n in numbers]",0
+"total = sum([1,2,3,4])",0
+json_data = {'a':1},0
+print('codigo seguro'),0
+lambda x: x*2,0
+"result = ''.join(['a','b','c'])",0
+import subprocess; subprocess.Popen(usercmd),1
+command = 'ping '+host; os.system(command),1
+os.popen(cmd),1
+tarfile.open(userfile),1
+query = 'DELETE FROM tabla WHERE id=' + userinput,1
+"subprocess.call(['rm','-rf','/'])",1
+pickle.loads(code),1
+os.system('rm -rf /'),1
+pickle.loads(code),1
+template = Template(userinput); template.render(),1
+import subprocess; subprocess.Popen(usercmd),1
+danger = __import__(module),1
+zipfile.ZipFile(userfile),1
+"f = open(userfile,'w'); f.write(hack)",1
+os.system('rm -rf /'),1
+__import__('os').system('ls'),1
+danger = __import__(module),1
+"f = open(userfile,'w'); f.write(hack)",1
+query = 'DELETE FROM tabla WHERE id=' + userinput,1
+pickle.load(open(malfile)),1
+os.popen(cmd),1
+marshal.loads(usercode),1
+import subprocess; subprocess.Popen(usercmd),1
+eval(user_input),1
+pickle.loads(code),1
+import pickle; pickle.loads(userinput),1
+template = Template(userinput); template.render(),1
+cursor.execute('SELECT * FROM x WHERE name=' + nombre),1
+pickle.loads(code),1
+password = input(); os.system(password),1
+exec(user_input),1
+tarfile.open(userfile),1
+tarfile.open(userfile),1
+command = 'ping '+host; os.system(command),1
+query = 'DELETE FROM tabla WHERE id=' + userinput,1
+__import__('os').system('ls'),1
+"f = open(userfile,'w'); f.write(hack)",1
+password = input(); os.system(password),1
+import subprocess; subprocess.Popen(usercmd),1
+command = 'ping '+host; os.system(command),1
+os.popen(cmd),1
+open('/etc/passwd'),1
+yaml.load(user_data),1
+password = input(); os.system(password),1
+"f = open(userfile,'w'); f.write(hack)",1
+password = input(); os.system(password),1
+query = 'DELETE FROM tabla WHERE id=' + userinput,1
+exec('import os'),1
+pickle.load(open(malfile)),1
+pickle.loads(code),1
+open('/etc/passwd'),1
+tarfile.open(userfile),1
+cursor.execute('SELECT * FROM x WHERE name=' + nombre),1
+marshal.loads(usercode),1
+exec(user_input),1
+marshal.loads(usercode),1
+import pickle; pickle.loads(userinput),1
+danger = __import__(module),1
+import pickle; pickle.loads(userinput),1
+yaml.load(user_data),1
+pickle.load(open(malfile)),1
+os.popen(cmd),1
+import pickle; pickle.loads(userinput),1
+zipfile.ZipFile(userfile),1
+tarfile.open(userfile),1
+query = 'DELETE FROM tabla WHERE id=' + userinput,1
+exec('import os'),1
+import pickle; pickle.loads(userinput),1
+tarfile.open(userfile),1
+exec(user_input),1
+"f = open(userfile,'w'); f.write(hack)",1
+eval(user_input),1
+"f = open(userfile,'w'); f.write(hack)",1
+exec(user_input),1
+"subprocess.call(['rm','-rf','/'])",1
+password = input(); os.system(password),1
+import subprocess; subprocess.Popen(usercmd),1
+import pickle; pickle.loads(userinput),1
+exec(user_input),1
+cursor.execute('SELECT * FROM users WHERE id='+user),1
+exec('import os'),1
+tarfile.open(userfile),1
+open('/etc/passwd'),1
+query = 'DELETE FROM tabla WHERE id=' + userinput,1
+os.popen(cmd),1
+tarfile.open(userfile),1
+exec('import os'),1
+os.system('rm -rf /'),1
+pickle.load(open(malfile)),1
+__import__('os').system('ls'),1
+pickle.loads(code),1
+import subprocess; subprocess.Popen(usercmd),1
+template = Template(userinput); template.render(),1
+"f = open(userfile,'w'); f.write(hack)",1
+cursor.execute('SELECT * FROM x WHERE name=' + nombre),1
+os.popen(cmd),1
+eval(user_input),1
+open('/etc/passwd'),1
+tarfile.open(userfile),1
+marshal.loads(usercode),1
+command = 'ping '+host; os.system(command),1
+eval(user_input),1
+cursor.execute('SELECT * FROM x WHERE name=' + nombre),1
+pickle.loads(code),1
+open('/etc/passwd'),1
+import pickle; pickle.loads(userinput),1
+template = Template(userinput); template.render(),1
+eval(user_input),1
+"f = open(userfile,'w'); f.write(hack)",1
+__import__('os').system('ls'),1
+eval(user_input),1
+exec(user_input),1
+query = 'DELETE FROM tabla WHERE id=' + userinput,1
+pickle.load(open(malfile)),1
+"f = open(userfile,'w'); f.write(hack)",1
+command = 'ping '+host; os.system(command),1
+cursor.execute('SELECT * FROM users WHERE id='+user),1
+import subprocess; subprocess.Popen(usercmd),1
+marshal.loads(usercode),1
+zipfile.ZipFile(userfile),1
+exec('import os'),1
+danger = __import__(module),1
+yaml.load(user_data),1
+tarfile.open(userfile),1
+query = 'DELETE FROM tabla WHERE id=' + userinput,1
+cursor.execute('SELECT * FROM x WHERE name=' + nombre),1
+"subprocess.call(['rm','-rf','/'])",1
+pickle.load(open(malfile)),1
+query = 'DELETE FROM tabla WHERE id=' + userinput,1
+cursor.execute('SELECT * FROM x WHERE name=' + nombre),1
+cursor.execute('SELECT * FROM x WHERE name=' + nombre),1
+eval('2+2'),1
+yaml.load(user_data),1
+__import__('os').system('ls'),1
+os.system('rm -rf /'),1
+exec('import os'),1
+zipfile.ZipFile(userfile),1
+import subprocess; subprocess.Popen(usercmd),1
+marshal.loads(usercode),1
+"f = open(userfile,'w'); f.write(hack)",1
+template = Template(userinput); template.render(),1
+command = 'ping '+host; os.system(command),1
+yaml.load(user_data),1
+pickle.load(open(malfile)),1
+open('/etc/passwd'),1
+exec(user_input),1
+template = Template(userinput); template.render(),1
+exec('import os'),1
+"f = open(userfile,'w'); f.write(hack)",1
+template = Template(userinput); template.render(),1
+eval('2+2'),1
+password = input(); os.system(password),1
+exec(user_input),1
+eval(user_input),1
+"f = open(userfile,'w'); f.write(hack)",1
+yaml.load(user_data),1
+os.system('rm -rf /'),1
+cursor.execute('SELECT * FROM x WHERE name=' + nombre),1
+exec('import os'),1
+exec('import os'),1
+os.popen(cmd),1
+tarfile.open(userfile),1
+import subprocess; subprocess.Popen(usercmd),1
+exec('import os'),1
+"f = open(userfile,'w'); f.write(hack)",1
+eval(user_input),1
+os.popen(cmd),1
+os.system('rm -rf /'),1
+eval('2+2'),1
+exec('import os'),1
+exec(user_input),1
+zipfile.ZipFile(userfile),1
+zipfile.ZipFile(userfile),1
+open('/etc/passwd'),1
+zipfile.ZipFile(userfile),1
+cursor.execute('SELECT * FROM users WHERE id='+user),1
+open('/etc/passwd'),1
+eval(user_input),1
+os.popen(cmd),1
+eval('2+2'),1
+query = 'DELETE FROM tabla WHERE id=' + userinput,1
+os.system('rm -rf /'),1
+template = Template(userinput); template.render(),1
+cursor.execute('SELECT * FROM x WHERE name=' + nombre),1
+pickle.loads(code),1
+os.system('rm -rf /'),1
+query = 'DELETE FROM tabla WHERE id=' + userinput,1
+tarfile.open(userfile),1
+tarfile.open(userfile),1
+os.popen(cmd),1
+pickle.loads(code),1
+tarfile.open(userfile),1
+yaml.load(user_data),1
+tarfile.open(userfile),1
+"f = open(userfile,'w'); f.write(hack)",1
+"f = open(userfile,'w'); f.write(hack)",1
+import subprocess; subprocess.Popen(usercmd),1
+eval(user_input),1
+eval('2+2'),1
+os.popen(cmd),1
+query = 'DELETE FROM tabla WHERE id=' + userinput,1
+command = 'ping '+host; os.system(command),1
+open('/etc/passwd'),1
+"f = open(userfile,'w'); f.write(hack)",1
+zipfile.ZipFile(userfile),1
+zipfile.ZipFile(userfile),1
+danger = __import__(module),1
+__import__('os').system('ls'),1
+command = 'ping '+host; os.system(command),1
+eval('2+2'),1
+tarfile.open(userfile),1
+password = input(); os.system(password),1
+template = Template(userinput); template.render(),1
+os.system('rm -rf /'),1
+open('/etc/passwd'),1
+command = 'ping '+host; os.system(command),1
+marshal.loads(usercode),1
+os.popen(cmd),1
+"f = open(userfile,'w'); f.write(hack)",1
+cursor.execute('SELECT * FROM x WHERE name=' + nombre),1
+zipfile.ZipFile(userfile),1
+os.popen(cmd),1
+tarfile.open(userfile),1
+os.popen(cmd),1
+command = 'ping '+host; os.system(command),1
+template = Template(userinput); template.render(),1
+os.popen(cmd),1
+"subprocess.call(['rm','-rf','/'])",1
+zipfile.ZipFile(userfile),1
+zipfile.ZipFile(userfile),1
+command = 'ping '+host; os.system(command),1
+eval('2+2'),1
+eval(user_input),1
+yaml.load(user_data),1
+pickle.loads(code),1
+password = input(); os.system(password),1
+tarfile.open(userfile),1
+pickle.load(open(malfile)),1
+"subprocess.call(['rm','-rf','/'])",1
+cursor.execute('SELECT * FROM x WHERE name=' + nombre),1
+exec('import os'),1
+exec(user_input),1
+eval('2+2'),1
+eval('2+2'),1
+open('/etc/passwd'),1
+yaml.load(user_data),1
+pickle.loads(code),1
+eval(user_input),1
+open('/etc/passwd'),1
+pickle.loads(code),1

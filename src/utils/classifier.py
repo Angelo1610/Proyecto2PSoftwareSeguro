@@ -1,6 +1,11 @@
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 import joblib
 import os
-from utils.feature_extractor import extract_features
+from src.utils.feature_extractor import extract_features
+
+
 
 # Ruta relativa al modelo desde src/
 MODEL_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "ml", "model.pkl")
