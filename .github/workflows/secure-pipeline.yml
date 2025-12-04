@@ -82,9 +82,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install Railway CLI
-        run: |
-          curl -fsSL https://railway.app/install.sh | sh
-          echo "$HOME/.railway/bin" >> $GITHUB_PATH
+        run: npm i -g @railway/cli
 
       - name: Deploy to Railway
         run: railway up --service secure-app
