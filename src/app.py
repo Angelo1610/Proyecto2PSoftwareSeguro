@@ -20,8 +20,8 @@ def scan_code():
     pred, prob, details = classify(code)
 
     return jsonify({
-        "prediction": pred,
-        "probability": prob,
+        "prediction": str(pred),
+        "probability": float(prob),
         "details": details
     })
 
