@@ -3,14 +3,16 @@ name: Secure Pipeline ML
 on:
   pull_request:
     branches:
-      - test
+      - test   # ← Cada PR hacia test activa el análisis de seguridad
 
 jobs:
+
   security_review:
     name: Análisis de Seguridad con IA
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Setup Python
@@ -22,26 +24,38 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Security Scan (ML)
-        run: python ci_security_scan.py
         env:
           TG_TOKEN: ${{ secrets.TG_TOKEN }}
           TG_CHAT: ${{ secrets.TG_CHAT }}
+          BASE: ${{ github.base_ref }}
+          HEAD: ${{ github.head_ref }}
+        run: python ci_security_scan.py
+
 
   run_tests:
     name: Pruebas Unitarias
     needs: security_review
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - run: pip install -r requirements.txt
-      - run: pytest
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run PyTest
+        run: pytest
+
 
   deploy:
     name: Despliegue Automático
     needs: run_tests
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Deploy to Railway
         run: railway up --service secure-app
@@ -50,4 +64,4 @@ jobs:
 
       - name: Notificar despliegue
         run: |
-          curl -s "https://api.telegram.org/bot${{ secrets.TG_TOKEN }}/sendMessage?chat_id=${{ secrets.TG_CHAT }}&text=✔ Deploy exitoso"
+          curl -s "https://api.telegram.org/bot${{ secrets.TG_TOKEN }}/sendMessage?chat_id=${{ secrets.TG_CHAT }}&text=✔ Deploy realizado correctamente 🚀"

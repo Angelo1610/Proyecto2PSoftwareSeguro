@@ -9,11 +9,11 @@ from src.utils.classifier import classify
 TG_TOKEN = os.environ.get("TG_TOKEN")
 TG_CHAT = os.environ.get("TG_CHAT")
 
-# Ruta absoluta del ejecutable GH CLI
-GH = r"C:\Program Files\GitHub CLI\gh.exe"   # ← ESTA ES LA CLAVE
+# Variables que vienen del workflow (base_ref y head_ref)
+BASE = os.environ.get("BASE")
+HEAD = os.environ.get("HEAD")
 
 def notify(msg: str):
-    """Enviar mensajes por Telegram."""
     if TG_TOKEN and TG_CHAT:
         requests.get(
             f"https://api.telegram.org/bot{TG_TOKEN}/sendMessage",
@@ -22,24 +22,30 @@ def notify(msg: str):
 
 notify("🔍 Iniciando revisión de seguridad del PR...")
 
-# ---- FIX PARA WINDOWS (UTF-8) ----
+# ============================
+# Obtener diff del Pull Request
+# ============================
+diff_cmd = f"git diff origin/{BASE}...origin/{HEAD}"
+
 diff = subprocess.check_output(
-    "git diff HEAD~1",
+    diff_cmd,
     shell=True,
     stderr=subprocess.STDOUT,
     encoding="utf-8",
     errors="replace"
 )
-# -----------------------------------
 
+# ============================
+# Clasificación con ML
+# ============================
 prediction, prob, details = classify(diff)
 
 if prediction == "vulnerable":
     notify(f"❌ Código vulnerable detectado. Prob: {prob*100:.2f}%")
 
-    # Crear issue automática (usando ruta absoluta)
+    # Crear issue con GH CLI (Linux, ya instalado en Actions)
     subprocess.run([
-        GH, "issue", "create",
+        "gh", "issue", "create",
         "--title", "⚠ Vulnerabilidad detectada en PR",
         "--body", f"Probabilidad: {prob}\n\nDetalles:\n{details}"
     ])
