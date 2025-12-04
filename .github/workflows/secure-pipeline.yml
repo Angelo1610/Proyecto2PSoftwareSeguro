@@ -83,23 +83,20 @@ jobs:
 
       - name: Install Railway CLI
         run: |
-          curl -fsSL https://railway.app/install.sh | sh
-          export PATH="$HOME/.railway/bin:$PATH"
+          npm i -g @railway/cli
 
       - name: Deploy to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          export PATH="$HOME/.railway/bin:$PATH"
-          railway link
-          railway up --detach
+          railway up --detach || railway up
 
       - name: Notificar despliegue
         if: success()
         run: |
-          curl -s "https://api.telegram.org/bot${{ secrets.TG_TOKEN }}/sendMessage?chat_id=${{ secrets.TG_CHAT }}&text=✔ Deploy realizado correctamente 🚀"
+          curl -s "https://api.telegram.org/bot${{ secrets.TG_TOKEN }}/sendMessage?chat_id=${{ secrets.TG_CHAT }}&text=✅ Deploy realizado correctamente 🚀"
       
       - name: Notificar error en deploy
         if: failure()
         run: |
-          curl -s "https://api.telegram.org/bot${{ secrets.TG_TOKEN }}/sendMessage?chat_id=${{ secrets.TG_CHAT }}&text=❌ Error en el deploy"
+          curl -s "https://api.telegram.org/bot${{ secrets.TG_TOKEN }}/sendMessage?chat_id=${{ secrets.TG_CHAT }}&text=❌ Error en el deploy - Revisa los logs en GitHub Actions"
