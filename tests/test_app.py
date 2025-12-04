@@ -1,5 +1,9 @@
 import json
+import sys, os
+sys.path.append(os.path.abspath("."))
+
 from src.app import app
+
 
 def test_home():
     client = app.test_client()

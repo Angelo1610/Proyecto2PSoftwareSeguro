@@ -3,10 +3,13 @@ name: Secure Pipeline ML
 on:
   pull_request:
     branches:
-      - test
+      - test   # Cada PR hacia test activa TODA la pipeline
 
 jobs:
 
+  ###########################################################
+  # JOB 1 — ANÁLISIS DE SEGURIDAD (IA + ML)
+  ###########################################################
   security_review:
     name: Análisis de Seguridad con IA
     runs-on: ubuntu-latest
@@ -15,7 +18,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0   # ← NECESARIO para git diff
+          fetch-depth: 0   # NECESARIO para git diff
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -34,6 +37,9 @@ jobs:
         run: python ci_security_scan.py
 
 
+  ###########################################################
+  # JOB 2 — PRUEBAS UNITARIAS (Solo si seguridad pasa)
+  ###########################################################
   run_tests:
     name: Pruebas Unitarias
     needs: security_review
@@ -43,15 +49,27 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0   # ← TAMBIÉN AQUÍ
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
 
       - name: Install dependencies
         run: pip install -r requirements.txt
+
+      # IMPORTANTE: Sin esto pytest NO puede importar src.app
+      - name: Fix PYTHONPATH for GitHub Actions
+        run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)" >> $GITHUB_ENV
 
       - name: Run PyTest
         run: pytest
 
 
+  ###########################################################
+  # JOB 3 — DESPLIEGUE AUTOMÁTICO (solo si pruebas pasan)
+  ###########################################################
   deploy:
     name: Despliegue Automático
     needs: run_tests
@@ -61,7 +79,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0   # ← TAMBIÉN AQUÍ
+          fetch-depth: 0
 
       - name: Deploy to Railway
         run: railway up --service secure-app
