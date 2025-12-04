@@ -58,7 +58,8 @@ try:
             prediction, prob, details = classify(code)
             
             # El modelo devuelve 1 para vulnerable, 0 para safe
-            if (prediction == "1" or prediction == 1 or prediction == "vulnerable") and prob > 0.6:
+            # Umbral reducido a 50% para ser más estricto
+            if (prediction == "1" or prediction == 1 or prediction == "vulnerable") and prob > 0.5:
                 vulnerable_files.append({
                     "file": file_path,
                     "prob": prob,
