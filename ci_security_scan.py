@@ -3,6 +3,7 @@ import os
 import subprocess
 import requests
 import platform
+import glob
 
 sys.path.append(os.path.abspath("src"))
 
@@ -23,26 +24,76 @@ def notify(msg: str):
 
 notify("🔍 Iniciando revisión de seguridad del PR...")
 
-# FIJO Y COMPATIBLE CON GITHUB ACTIONS
-diff = subprocess.check_output(
-    "git diff HEAD~1",
-    shell=True,
-    stderr=subprocess.STDOUT,
-    encoding="utf-8",
-    errors="replace"
-)
-
-prediction, prob, details = classify(diff)
-
-if prediction == "vulnerable":
-    notify(f"❌ Código vulnerable detectado. Prob: {prob*100:.2f}%")
-
-    subprocess.run([
-        GH, "issue", "create",
-        "--title", "⚠ Vulnerabilidad detectada en PR",
-        "--body", f"Probabilidad: {prob}\n\nDetalles:\n{details}"
-    ])
-
-    raise SystemExit("Vulnerabilidad encontrada. Pipeline detenido.")
-
-notify(f"✔ Código seguro. Prob: {prob*100:.2f}%")
+# Obtener archivos modificados en el PR
+try:
+    # Obtener la rama base desde las variables de entorno de GitHub
+    base_ref = os.environ.get("GITHUB_BASE_REF", "origin/test")
+    
+    # Obtener los archivos modificados en el PR
+    changed_files = subprocess.check_output(
+        f"git diff --name-only origin/{base_ref}...HEAD",
+        shell=True,
+        stderr=subprocess.STDOUT,
+        encoding="utf-8",
+        errors="replace"
+    ).strip().split("\n")
+    
+    # Filtrar solo archivos Python
+    python_files = [f for f in changed_files if f.endswith(".py") and os.path.exists(f)]
+    
+    if not python_files:
+        notify("✔ No hay archivos Python modificados")
+        sys.exit(0)
+    
+    notify(f"📝 Analizando {len(python_files)} archivos Python...")
+    
+    # Analizar cada archivo
+    vulnerable_files = []
+    
+    for file_path in python_files:
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                code = f.read()
+            
+            prediction, prob, details = classify(code)
+            
+            if prediction == "vulnerable" and prob > 0.6:
+                vulnerable_files.append({
+                    "file": file_path,
+                    "prob": prob,
+                    "details": details
+                })
+                notify(f"⚠️ {file_path}: {prob*100:.1f}% vulnerable")
+        except Exception as e:
+            print(f"Error analizando {file_path}: {e}")
+    
+    # Si hay vulnerabilidades, detener el pipeline
+    if vulnerable_files:
+        msg = "❌ Vulnerabilidades detectadas:\n\n"
+        for item in vulnerable_files:
+            msg += f"• {item['file']}: {item['prob']*100:.1f}% vulnerable\n"
+            msg += f"  Detalles: {item['details']}\n\n"
+        
+        notify(msg[:4000])  # Telegram tiene límite de caracteres
+        
+        # Crear issue en GitHub
+        issue_body = f"## ⚠️ Vulnerabilidades Detectadas\n\n"
+        for item in vulnerable_files:
+            issue_body += f"### 📄 `{item['file']}`\n"
+            issue_body += f"- **Probabilidad:** {item['prob']*100:.1f}%\n"
+            issue_body += f"- **Detalles:** {item['details']}\n\n"
+        
+        subprocess.run([
+            GH, "issue", "create",
+            "--title", "⚠️ Vulnerabilidades detectadas en PR",
+            "--body", issue_body
+        ], check=False)
+        
+        raise SystemExit(f"❌ {len(vulnerable_files)} archivo(s) vulnerable(s) detectado(s)")
+    
+    notify(f"✅ Todos los archivos son seguros")
+    
+except Exception as e:
+    print(f"Error en análisis: {e}")
+    notify(f"❌ Error en análisis: {str(e)[:100]}")
+    raise
