@@ -91,10 +91,16 @@ jobs:
 
       - name: Notificar despliegue
         if: success()
+        continue-on-error: true
         run: |
-          curl -s "https://api.telegram.org/bot${{ secrets.TG_TOKEN }}/sendMessage?chat_id=${{ secrets.TG_CHAT }}&text=✅ Deploy iniciado en Railway 🚀"
+          if [ -n "${{ secrets.TG_TOKEN }}" ] && [ -n "${{ secrets.TG_CHAT }}" ]; then
+            curl -s "https://api.telegram.org/bot${{ secrets.TG_TOKEN }}/sendMessage?chat_id=${{ secrets.TG_CHAT }}&text=✅ Deploy iniciado en Railway 🚀"
+          fi
       
       - name: Notificar error en deploy
         if: failure()
+        continue-on-error: true
         run: |
-          curl -s "https://api.telegram.org/bot${{ secrets.TG_TOKEN }}/sendMessage?chat_id=${{ secrets.TG_CHAT }}&text=❌ Error al iniciar el deploy"
+          if [ -n "${{ secrets.TG_TOKEN }}" ] && [ -n "${{ secrets.TG_CHAT }}" ]; then
+            curl -s "https://api.telegram.org/bot${{ secrets.TG_TOKEN }}/sendMessage?chat_id=${{ secrets.TG_CHAT }}&text=❌ Error al iniciar el deploy"
+          fi
