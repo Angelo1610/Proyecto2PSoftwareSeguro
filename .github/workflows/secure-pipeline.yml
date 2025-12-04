@@ -81,15 +81,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install Railway CLI
-        run: |
-          npm i -g @railway/cli
-
       - name: Deploy to Railway
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          railway up --service ${{ secrets.RAILWAY_SERVICE_ID || 'secure-app' }} || railway up
+        uses: railwayapp/railway-deploy@v1
+        with:
+          railway_token: ${{ secrets.RAILWAY_TOKEN }}
+          service: secure-app
 
       - name: Notificar despliegue
         if: success()
