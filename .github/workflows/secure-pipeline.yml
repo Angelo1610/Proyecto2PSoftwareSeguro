@@ -74,6 +74,7 @@ jobs:
     name: Despliegue Automático
     needs: run_tests
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true || github.ref == 'refs/heads/test'
 
     steps:
       - name: Checkout repository
@@ -81,13 +82,25 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install Railway CLI
+        run: |
+          curl -fsSL https://railway.app/install.sh | sh
+          export PATH="$HOME/.railway/bin:$PATH"
+
       - name: Deploy to Railway
-        uses: bervProject/railway-deploy@main
-        with:
-          railway_token: ${{ secrets.RAILWAY_TOKEN }}
-          service: secure-app
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          export PATH="$HOME/.railway/bin:$PATH"
+          railway link
+          railway up --detach
 
       - name: Notificar despliegue
         if: success()
         run: |
           curl -s "https://api.telegram.org/bot${{ secrets.TG_TOKEN }}/sendMessage?chat_id=${{ secrets.TG_CHAT }}&text=✔ Deploy realizado correctamente 🚀"
+      
+      - name: Notificar error en deploy
+        if: failure()
+        run: |
+          curl -s "https://api.telegram.org/bot${{ secrets.TG_TOKEN }}/sendMessage?chat_id=${{ secrets.TG_CHAT }}&text=❌ Error en el deploy"
