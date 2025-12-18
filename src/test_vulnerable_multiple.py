@@ -1,108 +1,36 @@
-package ec.edu.espe.ms_clientes.servicios.impl;
+# Archivo de prueba con múltiples vulnerabilidades para testing del pipeline
+import os
+import sqlite3
 
-import ec.edu.espe.ms_clientes.dto.mapper.PersonaMapper;
-import ec.edu.espe.ms_clientes.dto.request.PersonaJuridicaRequestDto;
-import ec.edu.espe.ms_clientes.dto.request.PersonaNaturalRequestDto;
-import ec.edu.espe.ms_clientes.dto.response.PersonaResponseDto;
-import ec.edu.espe.ms_clientes.models.Persona;
-import ec.edu.espe.ms_clientes.models.PersonaNatural;
-import ec.edu.espe.ms_clientes.repostiorios.PersonaRepositorio;
-import ec.edu.espe.ms_clientes.servicios.PersonaServicio;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+# Vulnerabilidad 1: eval() - Ejecución de código arbitrario
+def calcular_resultado(expresion):
+    """Función vulnerable que usa eval()"""
+    resultado = eval(expresion)  # PELIGRO: eval permite ejecución de código
+    return resultado
 
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
+# Vulnerabilidad 2: exec() - Ejecución de código arbitrario
+def ejecutar_comando(codigo):
+    """Función vulnerable que usa exec()"""
+    exec(codigo)  # PELIGRO: exec ejecuta código Python arbitrario
 
-@Transactional
-@Service
-@Slf4j //log.info - log.error - log.debug
-@RequiredArgsConstructor
-public class PersonaServicioImpl implements PersonaServicio {
+# Vulnerabilidad 3: os.system() - Inyección de comandos
+def listar_archivos(directorio):
+    """Función vulnerable que usa os.system()"""
+    comando = f"ls {directorio}"
+    os.system(comando)  # PELIGRO: permite inyección de comandos
 
-    private final PersonaRepositorio personaRepositorio;
-    private final PersonaMapper personaMapper;
+# Vulnerabilidad 4: SQL Injection
+def buscar_usuario(nombre):
+    """Función vulnerable a SQL Injection"""
+    conn = sqlite3.connect('usuarios.db')
+    cursor = conn.cursor()
+    query = f"SELECT * FROM usuarios WHERE nombre = '{nombre}'"  # PELIGRO: SQL injection
+    cursor.execute(query)
+    resultado = cursor.fetchall()
+    conn.close()
+    return resultado
 
-    @Override
-    @Transactional
-    public PersonaResponseDto crearPersonaNatural(PersonaNaturalRequestDto dto) {
-
-        if (personaRepositorio.existsByIdentificacion(dto.getIdentificacion())) {
-            log.error("Ya existe una persona con esa identificacion: " + dto.getIdentificacion());
-            throw new RuntimeException("Ya existe una persona con esa identificación");
-        }
-
-        if (personaRepositorio.existsByEmail(dto.getEmail())) {
-            throw new RuntimeException("Ya existe una persona con esa email");
-        }
-
-        if (personaRepositorio.existsByTelefono(dto.getTelefono())) {
-            throw new RuntimeException("Ya existe una persona con esa telefono");
-        }
-
-        PersonaNatural pn = PersonaMapper.toEntity(dto);
-
-        if (!pn.validarIdentificacion()) {
-            throw new RuntimeException("La identificacion no es valida");
-        }
-
-        Persona p = personaRepositorio.save(pn);
-
-        log.info("Persona creada satisfactoriamente con id = " + p.getId());
-        return personaMapper.toDto(p);
-    }
-
-    @Override
-    public PersonaResponseDto crearPersonaJuridica(PersonaJuridicaRequestDto dto) {
-        //completar registro de personaJuridica
-        return null;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<PersonaResponseDto> findAllPersona() {
-        personaRepositorio.findAll()
-                .stream()
-                .map(personaMapper::toDto)
-                .collect(Collectors.toList());
-        return List.of();
-    }
-
-    @Override
-    public void eliminarPersona(UUID id) {
-        //completar
-    }
-
-    @Override
-    public PersonaResponseDto actualizarPersonaNatural(UUID id, PersonaNaturalRequestDto dto) {
-        //completar
-        return null;
-    }
-
-    @Override
-    public PersonaResponseDto actualizarPersonaJuridica(UUID id, PersonaJuridicaRequestDto dto) {
-        //completar
-        return null;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<PersonaResponseDto> ListarPersonasNaturales() {
-
-
-    }
-
-    @Override
-    public List<PersonaResponseDto> listarPersonasNaturales() {
-
-        return personaRepositorio.findPersonasNaturalesActivas()
-                .stream()
-                .map(personaMapper::toDto)
-                .collect(Collectors.toList());
-    }
-
-
-}
+# Código de prueba
+if __name__ == "__main__":
+    print("Este archivo contiene vulnerabilidades intencionales para testing")
+    # NO EJECUTAR en producción
