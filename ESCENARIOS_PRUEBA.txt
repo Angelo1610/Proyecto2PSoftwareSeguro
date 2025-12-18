@@ -1,0 +1,129 @@
+# 🔄 GUÍA DE ESCENARIOS DE PRUEBA DEL PIPELINE
+
+## 📋 Descripción General
+
+Para demostrar que el pipeline funciona correctamente, debes crear **2 Pull Requests** con diferentes escenarios:
+
+---
+
+## ✅ ESCENARIO 1: Código SEGURO (Pipeline PASA)
+
+### Archivo a usar: `test_seguro.py`
+
+**Crear PR con código seguro:**
+```powershell
+# 1. Ir a rama dev
+git checkout dev
+
+# 2. Asegurarte que test_seguro.py existe en src/
+# (Ya lo tienes creado)
+
+# 3. Crear un commit simple modificando test_seguro.py
+# (Agregar un comentario o cambio menor)
+
+# 4. Push y crear PR hacia test
+git add .
+git commit -m "Test: Agregar código seguro para demostrar pipeline exitoso"
+git push origin dev
+
+# 5. Crear PR
+gh pr create --base test --head dev --title "✅ PR Seguro - Pipeline debe PASAR" --body "Este PR contiene solo código seguro (test_seguro.py). El pipeline debe completar las 3 etapas exitosamente."
+```
+
+**Resultado esperado:**
+- ✅ Security Scan: PASA (sin vulnerabilidades detectadas)
+- ✅ Unit Tests: PASA (2/2 tests)
+- ✅ Deploy: DESPLIEGA a Railway
+
+---
+
+## ❌ ESCENARIO 2: Código VULNERABLE (Pipeline FALLA)
+
+### Archivo a usar: `test_vulnerable_multiple.py`
+
+**Este es el PR actual** - Ya lo tienes activo y funciona correctamente.
+
+**Resultado esperado (actual):**
+- ❌ Security Scan: **FALLA** con mensaje:
+  ```
+  ❌ 1 archivo(s) vulnerable(s) detectado(s)
+  Error: Process completed with exit code 1
+  ```
+- ⏹️ Unit Tests: NO SE EJECUTA (bloqueado por security_review)
+- ⏹️ Deploy: NO SE EJECUTA (bloqueado por security_review)
+
+**Archivo detectado:**
+- `src/test_vulnerable_multiple.py` con 4 vulnerabilidades:
+  1. `eval()` - Ejecución de código arbitrario
+  2. `exec()` - Ejecución de código arbitrario
+  3. `os.system()` - Inyección de comandos
+  4. SQL Injection sin parámetros
+
+---
+
+## 🎯 Cómo Ejecutar Ambos Escenarios
+
+### Para demostrar ambos casos:
+
+1. **Primero el escenario seguro:**
+   ```powershell
+   # Eliminar temporalmente el archivo vulnerable
+   git checkout dev
+   git rm src/test_vulnerable_multiple.py
+   git commit -m "Test: Remover vulnerabilidades para demostrar pipeline exitoso"
+   git push origin dev
+   
+   # Esperar a que el PR pase las 3 etapas ✅✅✅
+   gh pr checks
+   ```
+
+2. **Luego el escenario vulnerable:**
+   ```powershell
+   # Restaurar el archivo vulnerable
+   git checkout dev
+   git checkout HEAD~1 src/test_vulnerable_multiple.py  # Restaurar de commit anterior
+   # O simplemente crearlo de nuevo
+   git add src/test_vulnerable_multiple.py
+   git commit -m "Test: Agregar vulnerabilidades para demostrar detección"
+   git push origin dev
+   
+   # Esperar a que el PR falle en security ❌
+   gh pr checks
+   ```
+
+---
+
+## 📊 Resumen de Estados
+
+| Escenario | Security Scan | Unit Tests | Deploy | Exit Code |
+|-----------|--------------|------------|---------|-----------|
+| **Código Seguro** | ✅ PASA | ✅ PASA | ✅ DESPLIEGA | 0 |
+| **Código Vulnerable** | ❌ FALLA | ⏹️ BLOQUEADO | ⏹️ BLOQUEADO | 1 |
+
+---
+
+## 🔍 Verificar Estado del Pipeline
+
+```powershell
+# Ver checks del PR actual
+gh pr checks
+
+# Ver detalles completos
+gh pr view --web
+
+# Ver logs de un job específico
+gh run view --log
+```
+
+---
+
+## 💡 Nota Importante
+
+El error actual **"❌ 1 archivo(s) vulnerable(s) detectado(s)"** es **CORRECTO y ESPERADO** porque:
+
+1. ✅ El archivo `test_vulnerable_multiple.py` TIENE vulnerabilidades intencionales
+2. ✅ El modelo ML las detectó correctamente (prob > 50%)
+3. ✅ El pipeline DEBE FALLAR para evitar que código inseguro llegue a test/main
+4. ✅ Esto demuestra que la seguridad automatizada funciona
+
+**El warning de GH_TOKEN ya fue corregido** en el último commit.
