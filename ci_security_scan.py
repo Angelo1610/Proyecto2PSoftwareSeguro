@@ -38,19 +38,22 @@ try:
         errors="replace"
     ).strip().split("\n")
     
-    # Filtrar solo archivos Python
+    # Filtrar archivos Python y Java
     python_files = [f for f in changed_files if f.endswith(".py") and os.path.exists(f)]
+    java_files = [f for f in changed_files if f.endswith(".java") and os.path.exists(f)]
     
-    if not python_files:
-        notify("✔ No hay archivos Python modificados")
+    all_files = python_files + java_files
+    
+    if not all_files:
+        notify("✔ No hay archivos Python o Java modificados")
         sys.exit(0)
     
-    notify(f"📝 Analizando {len(python_files)} archivos Python...")
+    notify(f"📝 Analizando {len(python_files)} archivos Python y {len(java_files)} archivos Java...")
     
-    # Analizar cada archivo
+    # Analizar cada archivo (Python y Java)
     vulnerable_files = []
     
-    for file_path in python_files:
+    for file_path in all_files:
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 code = f.read()
