@@ -1,0 +1,169 @@
+# ============================================================================
+# ACTIVAR BRANCH PROTECTION RULES EN GITHUB
+# ============================================================================
+
+## MÉTODO 1: Desde la Web (Más Fácil)
+
+### Para la rama TEST:
+
+1. Ve a tu repositorio: https://github.com/Angelo1610/Proyecto2PSoftwareSeguro
+
+2. Click en "Settings" (⚙️ arriba a la derecha)
+
+3. En el menú lateral izquierdo, click en "Branches"
+
+4. Click en "Add branch protection rule" o "Add rule"
+
+5. En "Branch name pattern" escribe: test
+
+6. Activa las siguientes opciones:
+   ✅ Require a pull request before merging
+      ✅ Require approvals (puedes dejarlo en 0 si trabajas solo)
+      ✅ Dismiss stale pull request approvals when new commits are pushed
+   
+   ✅ Require status checks to pass before merging
+      ✅ Require branches to be up to date before merging
+      En "Status checks that are required":
+         - Busca y selecciona: "Análisis de Seguridad con IA"
+         - Busca y selecciona: "Pruebas Unitarias"
+         - Busca y selecciona: "Despliegue Automático"
+   
+   ✅ Require conversation resolution before merging
+   
+   ✅ Require linear history (opcional)
+   
+   ✅ Do not allow bypassing the above settings
+
+7. Click en "Create" al final de la página
+
+### Para la rama MAIN:
+
+1. En la misma página de "Branches", click en "Add rule" nuevamente
+
+2. En "Branch name pattern" escribe: main
+
+3. Activa las MISMAS opciones que para test:
+   ✅ Require a pull request before merging
+   ✅ Require status checks to pass before merging
+   ✅ Require conversation resolution before merging
+   ✅ Do not allow bypassing the above settings
+
+4. Click en "Create"
+
+---
+
+## MÉTODO 2: Desde GitHub CLI (Alternativo)
+
+```bash
+# Configurar protección para rama test
+gh api repos/Angelo1610/Proyecto2PSoftwareSeguro/branches/test/protection \
+  -X PUT \
+  -F required_status_checks='{"strict":true,"contexts":["Análisis de Seguridad con IA","Pruebas Unitarias"]}' \
+  -F enforce_admins=true \
+  -F required_pull_request_reviews='{"required_approving_review_count":0}' \
+  -F restrictions=null
+
+# Configurar protección para rama main
+gh api repos/Angelo1610/Proyecto2PSoftwareSeguro/branches/main/protection \
+  -X PUT \
+  -F required_status_checks='{"strict":true,"contexts":["Análisis de Seguridad con IA","Pruebas Unitarias"]}' \
+  -F enforce_admins=true \
+  -F required_pull_request_reviews='{"required_approving_review_count":0}' \
+  -F restrictions=null
+```
+
+---
+
+## VERIFICAR QUE FUNCIONAN:
+
+### Prueba 1: Intentar push directo a test (debe fallar)
+
+```bash
+git checkout test
+echo "test" > test.txt
+git add test.txt
+git commit -m "Test direct push"
+git push origin test
+```
+
+**Resultado esperado:**
+```
+remote: error: GH006: Protected branch update failed for refs/heads/test.
+remote: error: Changes must be made through a pull request.
+```
+
+### Prueba 2: Intentar merge sin PR (debe fallar)
+
+```bash
+git checkout test
+git merge dev
+git push origin test
+```
+
+**Resultado esperado:**
+```
+remote: error: GH006: Protected branch update failed for refs/heads/test.
+```
+
+### Prueba 3: Crear PR (debe funcionar)
+
+```bash
+git checkout dev
+# Hacer cambios
+git add .
+git commit -m "Cambios"
+git push origin dev
+
+# Crear PR
+gh pr create --base test --head dev --title "Test" --body "Test"
+```
+
+**Resultado esperado:**
+- El PR se crea correctamente
+- Aparecen los checks obligatorios
+- No se puede mergear hasta que pasen
+
+---
+
+## CAPTURA DE PANTALLA REQUERIDA
+
+Después de configurar, toma captura de:
+
+1. Settings → Branches mostrando las 2 reglas activas (test y main)
+2. Un PR mostrando los checks obligatorios antes de mergear
+
+Incluir estas capturas en el README o informe.
+
+---
+
+## RESUMEN DE CONFIGURACIÓN MÍNIMA REQUERIDA:
+
+Para rama TEST y MAIN:
+☑ Require a pull request before merging
+☑ Require status checks to pass before merging
+   - Análisis de Seguridad con IA
+   - Pruebas Unitarias
+   - Despliegue Automático
+☑ Require conversation resolution before merging
+☑ Do not allow bypassing the above settings
+
+---
+
+## SI TIENES PROBLEMAS:
+
+1. Asegúrate de tener permisos de admin en el repo
+2. Verifica que las ramas test y main existan
+3. Los status checks deben haber corrido al menos una vez para aparecer en la lista
+4. Si no aparecen los checks, crea un PR primero para que se ejecuten
+
+---
+
+## ELIMINAR PROTECCIÓN (si necesitas):
+
+```bash
+# Para test
+gh api repos/Angelo1610/Proyecto2PSoftwareSeguro/branches/test/protection -X DELETE
+
+# Para main
+gh api repos/Angelo1610/Proyecto2PSoftwareSeguro/branches/main/protection -X DELETE
+```
