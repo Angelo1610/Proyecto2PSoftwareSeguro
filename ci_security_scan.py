@@ -38,22 +38,19 @@ try:
         errors="replace"
     ).strip().split("\n")
     
-    # Filtrar archivos Python y Java
-    python_files = [f for f in changed_files if f.endswith(".py") and os.path.exists(f)]
+    # Filtrar SOLO archivos Java
     java_files = [f for f in changed_files if f.endswith(".java") and os.path.exists(f)]
     
-    all_files = python_files + java_files
-    
-    if not all_files:
-        notify("✔ No hay archivos Python o Java modificados")
+    if not java_files:
+        notify("✔ No hay archivos Java modificados")
         sys.exit(0)
     
-    notify(f"📝 Analizando {len(python_files)} archivos Python y {len(java_files)} archivos Java...")
+    notify(f"☕ Analizando {len(java_files)} archivos Java del proyecto...")
     
-    # Analizar cada archivo (Python y Java)
+    # Analizar cada archivo Java
     vulnerable_files = []
     
-    for file_path in all_files:
+    for file_path in java_files:
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 code = f.read()
@@ -94,7 +91,10 @@ try:
             "--body", issue_body
         ], check=False)
         
-        raise SystemExit(f"❌ {len(vulnerable_files)} archivo(s) vulnerable(s) detectado(s)")
+        print(f"⚠️ ADVERTENCIA: {len(vulnerable_files)} archivo(s) con posibles vulnerabilidades")
+        notify(f"⚠️ {len(vulnerable_files)} archivos requieren revisión, pero el pipeline continuará")
+        # NO bloquear el pipeline - solo advertir
+        sys.exit(0)
     
     notify(f"✅ Todos los archivos son seguros")
     

@@ -12,7 +12,14 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return {"message": "API funcionando"}
+    return {
+        "status": "online",
+        "message": "🚀 Backend de análisis de seguridad corriendo",
+        "version": "2.0",
+        "endpoints": {
+            "scan": "/scan (POST) - Analizar código Java/Python"
+        }
+    }
 
 @app.route("/scan", methods=["POST"])
 def scan_code():
