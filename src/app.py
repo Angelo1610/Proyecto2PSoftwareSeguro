@@ -4,7 +4,7 @@ import sys, os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from flask import Flask, request, jsonify
-from utils.classifier import classify
+from src.utils.classifier import classify
 
 app = Flask(__name__)
 
